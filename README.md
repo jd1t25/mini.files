@@ -220,6 +220,8 @@ Here are code snippets for some common installation methods (use only one):
     synchronize = '=',
     trim_left   = '<',
     trim_right  = '>',
+    accept      = 'y',
+    decline     = 'n',
   },
 
   -- General options

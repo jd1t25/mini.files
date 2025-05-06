@@ -174,6 +174,10 @@
 ---  |-------------|------|------------------------------------------------|
 ---  | Trim right  |  >   | Trim right part of branch                      |
 ---  |-------------|------|------------------------------------------------|
+---  | Accept      |  >   | Confirm Action for dialog                      |
+---  |-------------|------|------------------------------------------------|
+---  | Decline     |  >   | Decline Action for dialog                      |
+---  |-------------|------|------------------------------------------------|
 --- <
 --- Details:
 ---
@@ -209,6 +213,8 @@
 --- - "Trim left" and "Trim right" trim parts of the whole branch, not only its
 ---   currently visible parts.
 ---
+--- - "Accept" and "Decline" set customizable keys during confirmation dialog 
+---   instead of Yes and No
 --- Notes:
 ---
 --- - Each action has exported function with more details about it.
@@ -701,8 +707,8 @@ MiniFiles.config = {
     synchronize = '=',
     trim_left   = '<',
     trim_right  = '>',
-    accept      = 'J',
-    decline     = 'K',
+    accept      = 'y',
+    decline     = 'n',
   },
 
   -- General options
