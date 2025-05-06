@@ -701,6 +701,8 @@ MiniFiles.config = {
     synchronize = '=',
     trim_left   = '<',
     trim_right  = '>',
+    accept      = 'J',
+    decline     = 'K',
   },
 
   -- General options
@@ -844,7 +846,7 @@ MiniFiles.synchronize = function()
   local fs_actions = H.explorer_compute_fs_actions(explorer)
   if fs_actions ~= nil then
     local msg = table.concat(H.fs_actions_to_lines(fs_actions), '\n')
-    local confirm_res = vim.fn.confirm(msg, '&Yes\n&No\n&Cancel', 1, 'Question')
+    local confirm_res = H.confirm_with_keys(msg, 1, 'Question')
     if confirm_res == 3 then return false end
     if confirm_res == 1 then H.fs_actions_apply(fs_actions) end
   end
@@ -1305,6 +1307,8 @@ H.setup_config = function(config)
   H.check_type('mappings.synchronize', config.mappings.synchronize, 'string')
   H.check_type('mappings.trim_left', config.mappings.trim_left, 'string')
   H.check_type('mappings.trim_right', config.mappings.trim_right, 'string')
+  H.check_type('mappings.accept', config.mappings.accept, 'string')
+  H.check_type('mappings.decline', config.mappings.decline, 'string')
 
   H.check_type('options', config.options, 'table')
   H.check_type('options.use_as_default_explorer', config.options.use_as_default_explorer, 'boolean')
@@ -1341,6 +1345,20 @@ H.create_autocommands = function(config)
   au('VimResized', '*', MiniFiles.refresh, 'Refresh on resize')
   au('ColorScheme', '*', H.create_default_hl, 'Ensure colors')
 end
+
+--- Custom Confirm Function
+--- - Maps custom keys to default vim confirm function
+H.confirm_with_keys = function(msg, default, type)
+  -- local confirm_key = "j"
+  -- local not_confirm_key = "n"
+  local accept_label =  MiniFiles.config.mappings.accept .. "Yes"
+  local decline_label = MiniFiles.config.mappings.decline .. "No"
+
+  local menu = accept_label .. "\n" .. decline_label
+
+  return vim.fn.confirm(msg, menu, default or 1, type)
+end
+
 
 --stylua: ignore
 H.create_default_hl = function()
@@ -1805,7 +1823,7 @@ H.explorer_ignore_pending_fs_actions = function(explorer, action_name)
   if H.explorer_compute_fs_actions(explorer) == nil then return true end
 
   local msg = string.format('There are pending file system actions\n\n%s without synchronization?', action_name)
-  local confirm_res = vim.fn.confirm(msg, '&Yes\n&No', 1, 'Question')
+  local confirm_res = H.confirm_with_keys(msg, 1, 'Question')
   return confirm_res == 1
 end
 
