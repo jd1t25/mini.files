@@ -707,8 +707,8 @@ MiniFiles.config = {
     synchronize = '=',
     trim_left   = '<',
     trim_right  = '>',
-    accept      = 'y',
-    decline     = 'n',
+    -- accept      = 'y',
+    -- decline     = 'n',
   },
 
   -- General options
@@ -849,13 +849,17 @@ MiniFiles.synchronize = function()
   if explorer == nil then return end
 
   -- Parse and apply file system operations
+  -- local fs_actions = H.explorer_compute_fs_actions(explorer)
+  -- if fs_actions ~= nil then
+  --   local msg = table.concat(H.fs_actions_to_lines(fs_actions), '\n')
+  --   local confirm_res = H.confirm_with_keys(msg, 1, 'Question')
+  --   if confirm_res == 3 then return false end
+  --   if confirm_res == 1 then H.fs_actions_apply(fs_actions) end
+  -- end
   local fs_actions = H.explorer_compute_fs_actions(explorer)
-  if fs_actions ~= nil then
-    local msg = table.concat(H.fs_actions_to_lines(fs_actions), '\n')
-    local confirm_res = H.confirm_with_keys(msg, 1, 'Question')
-    if confirm_res == 3 then return false end
-    if confirm_res == 1 then H.fs_actions_apply(fs_actions) end
-  end
+     if fs_actions ~= nil then
+         H.fs_actions_apply(fs_actions)
+     end
 
   H.explorer_refresh(explorer, { force_update = true })
   return true
